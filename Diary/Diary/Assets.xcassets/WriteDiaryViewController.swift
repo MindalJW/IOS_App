@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol WriteDiaryViewDelegate: AnyObject {
+    func didSelectReigster(diary: Diary)
+}
+
 class WriteDiaryViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var confirmButton: UIBarButtonItem!
@@ -17,10 +21,13 @@ class WriteDiaryViewController: UIViewController {
         super.viewDidLoad()
         self.configureContentsTextView()
         self.configureDatePicker()
+        self.configureInputField()
+        self.confirmButton.isEnabled = false//처음에 등록버튼 비활성화
     }
     
     private let datePicker = UIDatePicker()
     private var diaryDate: Date?
+    weak var delegate: WriteDiaryViewDelegate?
     
     private func configureContentsTextView() {
         let borderColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0)
@@ -38,7 +45,21 @@ class WriteDiaryViewController: UIViewController {
         self.dateTextField.inputView = self.datePicker//키보드 대신 datePicker가 나오게함
     }
     
+    private func configureInputField() {
+        self.contentsTextView.delegate = self
+        self.titleTextField.addTarget(self, action: #selector(titleTextFieldDidChange(_:)), for: .editingChanged)
+        self.dateTextField.addTarget(self, action: #selector(dateTextFieldDidChange(_:)), for: .editingChanged)
+    }
+    
     @IBAction func tapConfirmButton(_ sender: Any) {
+        guard let title = self.titleTextField.text else { return }
+        guard let contents = self.contentsTextView.text else { return }
+        guard let date = self.diaryDate else { return }
+        
+        let diary = Diary(title: title, contents: contents, date: date, isStar: false)
+        self.delegate?.didSelectReigster(diary: diary)
+        self.navigationController?.popViewController(animated: true)
+        
     }
     
     @objc private func datePickerValueDidChange(_ datePicker: UIDatePicker) {
@@ -48,5 +69,30 @@ class WriteDiaryViewController: UIViewController {
         self.diaryDate = datePicker.date//변수에 저장
         self.dateTextField.text = formmater.string(from: datePicker.date)
         //string형태로 포맷된 날짜를 변경하여 textfield 입력
+        self.dateTextField.sendActions(for: .editingChanged)//날짜가 변경될때마다 .editingChanged액션을 보냄
+    }
+    
+    @objc private func titleTextFieldDidChange(_ textField: UITextField) {
+        self.validateInputField()
+    }
+    
+    @objc private func dateTextFieldDidChange(_ textField: UITextField) {
+        self.validateInputField()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }//빈화면을 터치하면 키패드 또는 데이트피커가 사라지게만듬
+    
+    private func validateInputField() {
+        self.confirmButton.isEnabled = !(self.titleTextField.text?.isEmpty ?? true) &&
+        !(self.dateTextField.text?.isEmpty ?? true) && !(self.contentsTextView.text?.isEmpty ?? true)
+        //nill 병합 연산자 A ?? B A가 nil이면 B를 반환 아니면 A를 반환
+    }
+}
+
+extension WriteDiaryViewController:UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        self.validateInputField()
     }
 }
