@@ -9,7 +9,7 @@ import UIKit
 
 protocol WriteDiaryViewDelegate: AnyObject {
     func didSelectReigster(diary: Diary)
-}
+}//위임자가 대신해야할 함수(프로토콜)를 채택
 
 class WriteDiaryViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
@@ -27,7 +27,7 @@ class WriteDiaryViewController: UIViewController {
     
     private let datePicker = UIDatePicker()
     private var diaryDate: Date?
-    weak var delegate: WriteDiaryViewDelegate?
+    weak var delegate: WriteDiaryViewDelegate?//델리게이트 선언, 없을수도있기때문에 옵셔널타입
     
     private func configureContentsTextView() {
         let borderColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0)
@@ -47,11 +47,14 @@ class WriteDiaryViewController: UIViewController {
     
     private func configureInputField() {
         self.contentsTextView.delegate = self
+        //콘텐츠텍스트뷰 위임
         self.titleTextField.addTarget(self, action: #selector(titleTextFieldDidChange(_:)), for: .editingChanged)
+        //제목텍스트필드의 값이 변경될때마다 셀렉터 메서드 동작
         self.dateTextField.addTarget(self, action: #selector(dateTextFieldDidChange(_:)), for: .editingChanged)
+        //데이트텍스트필드의 값이 변경될때마다 셀렉터 메서드 동작
     }
     
-    @IBAction func tapConfirmButton(_ sender: Any) {
+    @IBAction func tapConfirmButton(_ sender: Any) {//등록버튼을 누르면 호출
         guard let title = self.titleTextField.text else { return }
         guard let contents = self.contentsTextView.text else { return }
         guard let date = self.diaryDate else { return }
@@ -62,7 +65,7 @@ class WriteDiaryViewController: UIViewController {
         
     }
     
-    @objc private func datePickerValueDidChange(_ datePicker: UIDatePicker) {
+    @objc private func datePickerValueDidChange(_ datePicker: UIDatePicker) {//데이트피커의 값이 변경될때마다 호출
         let formmater = DateFormatter()//날짜를 포맷
         formmater.dateFormat = "yyyy년 MM월 dd일(EEEEE)"
         formmater.locale = Locale(identifier: "ko_KR")//한국어
@@ -84,7 +87,7 @@ class WriteDiaryViewController: UIViewController {
         self.view.endEditing(true)
     }//빈화면을 터치하면 키패드 또는 데이트피커가 사라지게만듬
     
-    private func validateInputField() {
+    private func validateInputField() {//모든 텍스트가 채워져야 등록버튼 활성화
         self.confirmButton.isEnabled = !(self.titleTextField.text?.isEmpty ?? true) &&
         !(self.dateTextField.text?.isEmpty ?? true) && !(self.contentsTextView.text?.isEmpty ?? true)
         //nill 병합 연산자 A ?? B A가 nil이면 B를 반환 아니면 A를 반환
@@ -92,7 +95,7 @@ class WriteDiaryViewController: UIViewController {
 }
 
 extension WriteDiaryViewController:UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
-        self.validateInputField()
+    func textViewDidChange(_ textView: UITextView) {//위임받은 기능
+        self.validateInputField()//텍스트뷰의 값이 변경될때마다 호출
     }
 }

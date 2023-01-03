@@ -27,12 +27,13 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let wirteDiaryController = segue.destination as? WriteDiaryViewController {
             wirteDiaryController.delegate = self
+            //넘어가는 화면이 WriteDiaryViewController으로 다운캐스팅 가능하다면 자신을 위임자로 정함
         }
     }
     
     private func dateToString(date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일(EEEEE)"
+        formatter.dateFormat = "yyyy/MM/dd(EEEEE)"
         formatter.locale = Locale(identifier: "ko_KR")
         return formatter.string(from: date)
         
@@ -62,7 +63,7 @@ extension ViewController:UICollectionViewDelegateFlowLayout {
 }
 
 extension ViewController:WriteDiaryViewDelegate {
-    func didSelectReigster(diary: Diary) {
+    func didSelectReigster(diary: Diary) {//위임자가 대신해야하는 기능
         self.diaryList.append(diary)
         self.collectionView.reloadData()
     }
