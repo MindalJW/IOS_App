@@ -25,8 +25,8 @@ class WriteDiaryViewController: UIViewController {
         self.confirmButton.isEnabled = false//처음에 등록버튼 비활성화
     }
     
-    private let datePicker = UIDatePicker()
-    private var diaryDate: Date?
+    private let datePicker = UIDatePicker()//데이트피커 인스턴스화
+    private var diaryDate: Date?//날짜를 저장할 변수
     weak var delegate: WriteDiaryViewDelegate?//델리게이트 선언, 없을수도있기때문에 옵셔널타입
     
     private func configureContentsTextView() {
@@ -55,12 +55,12 @@ class WriteDiaryViewController: UIViewController {
     }
     
     @IBAction func tapConfirmButton(_ sender: Any) {//등록버튼을 누르면 호출
-        guard let title = self.titleTextField.text else { return }
-        guard let contents = self.contentsTextView.text else { return }
-        guard let date = self.diaryDate else { return }
+        guard let title = self.titleTextField.text else { return } //제목 옵셔널 바인딩
+        guard let contents = self.contentsTextView.text else { return }//내용 옵셔널 바인딩
+        guard let date = self.diaryDate else { return }//날짜 옵셔널 바인딩
         
-        let diary = Diary(title: title, contents: contents, date: date, isStar: false)
-        self.delegate?.didSelectReigster(diary: diary)
+        let diary = Diary(title: title, contents: contents, date: date, isStar: false)//다이어리 객체 생성
+        self.delegate?.didSelectReigster(diary: diary)//위임자(ViewController)에게 전달
         self.navigationController?.popViewController(animated: true)
         
     }
