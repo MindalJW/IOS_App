@@ -7,6 +7,11 @@
 
 import UIKit
 
+enum DiaryEditorMode {//수정버튼을 통해 들어왔는지 등록버튼을 통해 들어왔는지 확인을 위한 열거형
+    case new
+    case edit(IndexPath, Diary)
+}
+
 protocol WriteDiaryViewDelegate: AnyObject {
     func didSelectReigster(diary: Diary)
 }//위임자가 대신해야할 함수(프로토콜)를 채택
@@ -22,12 +27,35 @@ class WriteDiaryViewController: UIViewController {
         self.configureContentsTextView()
         self.configureDatePicker()
         self.configureInputField()
+        self.configureEditMode()
         self.confirmButton.isEnabled = false//처음에 등록버튼 비활성화
+    }
+    
+    private func configureEditMode() {//수정을 눌러 일기작성화면에 들어왔으면 원래의 내용을 처음 일기작성화면에 표시
+        switch self.diaryEditorMode {//다이어리에디터모드변수의값이
+            case let .edit(_, diary): //.edit일 경우
+            self.titleTextField.text = diary.title // 제목 텍스트 필드에 다이어리의 제목을 설정
+            self.contentsTextView.text = diary.contents // 내용 텍스트 뷰에 다이어리의 내용을 설정
+            self.dateTextField.text = self.dateToString(date: diary.date) // 날짜 텍스트 필드에 다이어리의 날짜를 문자열로 변환한 것을 설정
+            self.diaryDate = diary.date // 다이어리 날짜에 다이어리의 날짜를 설정
+            self.confirmButton.title = "수정" // 확인 버튼의 제목을 "수정"으로 변경
+            
+        default:
+            break
+        }
+    }
+    
+    private func dateToString(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd(EEEEE)"
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter.string(from: date)
     }
     
     private let datePicker = UIDatePicker()//데이트피커 인스턴스화
     private var diaryDate: Date?//날짜를 저장할 변수
     weak var delegate: WriteDiaryViewDelegate?//델리게이트 선언, 없을수도있기때문에 옵셔널타입
+    var diaryEditorMode: DiaryEditorMode = .new
     
     private func configureContentsTextView() {
         let borderColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0)
@@ -58,10 +86,20 @@ class WriteDiaryViewController: UIViewController {
         guard let title = self.titleTextField.text else { return } //제목 옵셔널 바인딩
         guard let contents = self.contentsTextView.text else { return }//내용 옵셔널 바인딩
         guard let date = self.diaryDate else { return }//날짜 옵셔널 바인딩
-        
         let diary = Diary(title: title, contents: contents, date: date, isStar: false)//다이어리 객체 생성
-        self.delegate?.didSelectReigster(diary: diary)//위임자(ViewController)에게 전달
-        self.navigationController?.popViewController(animated: true)
+        
+        switch self.diaryEditorMode {
+        case .new:
+            self.delegate?.didSelectReigster(diary: diary)//위임자(ViewController)에게 전달
+        case let .edit(indexPath, _)://수정모드일때
+            NotificationCenter.default.post(//노티피케이션센터 포스트 등록
+                name: NSNotification.Name("editDiary"),//노티피케이션 이름 editDiary로 설정
+                object: diary,//오브젝트로 다이어리객체를 넘겨줌
+                userInfo: [//유저인포로 인덱스패치를 넘겨줌
+                    "indexPath.row": indexPath.row
+                ])
+        }
+        self.navigationController?.popViewController(animated: true)//등록버튼을 누르면 현재화면 팝
         
     }
     

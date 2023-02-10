@@ -20,7 +20,13 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.configureCollectionView()
         self.loadDiaryList()
+        NotificationCenter.default.addObserver(//노티피케이션 옵저버 등록
+            self,//옵저빙하는 인스턴스
+            selector: #selector(editDiaryNotification(_:)),//탐지됐을때 호출되는 함수
+            name: NSNotification.Name("editDiary"),//탐지할 노티피케이션 이름
+            object: nil)//어디서든 알람 수신가능
     }
+    
     
     private func configureCollectionView() {
         self.collectionView.collectionViewLayout = UICollectionViewFlowLayout()
@@ -29,10 +35,20 @@ class ViewController: UIViewController {
         self.collectionView.dataSource = self
     }
     
+    @objc func editDiaryNotification(_ notification: Notification) {//노티피케이션 옵저버가 탐지했을때 호출
+        guard let diary = notification.object as? Diary else { return }//노티피케이션의 오브젝트를 옵셔널바인딩
+        guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }//노티피케이션의 유저인포를 옵셔널바인딩
+        self.diaryList[row] = diary//처음에 선택한 다이어리 리스트의 다이어리를 수정한 다이어리로 저장
+        self.diaryList = self.diaryList.sorted(by: {
+            $0.date.compare($1.date) == .orderedDescending
+        })//다이어리 리스트를 시간순 정렬
+        self.collectionView.reloadData()//콜렉션뷰 새로고침
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let wirteDiaryController = segue.destination as? WriteDiaryViewController {
             wirteDiaryController.delegate = self
-            //넘어가는 화면이 WriteDiaryViewController으로 다운캐스팅 가능하다면 자신을 위임자로 정함
+            //넘어가는 화면이 WriteDiaryViewController으로 다운캐스팅 가능하다면 자신(ViewController)을 위임자로 정함
         }
     }
     
@@ -90,6 +106,18 @@ extension ViewController: UICollectionViewDataSource {
     }
 }
 
+extension ViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let Viewcontroller = self.storyboard?.instantiateViewController(identifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
+        let diary = self.diaryList[indexPath.row]
+        Viewcontroller.diary = diary
+        Viewcontroller.indexPath = indexPath
+        Viewcontroller.delegate = self
+        self.navigationController?.pushViewController(Viewcontroller, animated: true)
+        
+    }
+}
+
 extension ViewController:UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (UIScreen.main.bounds.width / 2) - 20, height: 200)
@@ -104,5 +132,12 @@ extension ViewController:WriteDiaryViewDelegate {
             $0.date.compare($1.date) == .orderedDescending
         })
         self.collectionView.reloadData()//데이터를 새로고침
+    }
+}
+
+extension ViewController: DiaryDetailViewDelegate {
+    func didSelectDelete(indexPath: IndexPath) {
+        self.diaryList.remove(at: indexPath.row)
+        self.collectionView.deleteItems(at: [indexPath])
     }
 }

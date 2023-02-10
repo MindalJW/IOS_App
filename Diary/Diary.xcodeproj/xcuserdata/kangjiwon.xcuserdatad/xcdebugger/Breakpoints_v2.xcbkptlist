@@ -14,10 +14,102 @@
             filePath = "Diary/Assets.xcassets/WriteDiaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "10"
-            endingLineNumber = "10"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
             landmarkName = "WriteDiaryViewDelegate"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  uuid = "9F97E22A-674F-42B7-943C-C5074CA22069 - c30b3f6c9b809294"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Diary.WriteDiaryViewController.titleTextField.getter : Swift.Optional&lt;__C.UITextField&gt;"
+                  moduleName = "Diary"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kangjiwon/Desktop/IOS%20/IOS_App/Diary/Diary/Assets.xcassets/WriteDiaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "88">
+               </Location>
+               <Location
+                  uuid = "9F97E22A-674F-42B7-943C-C5074CA22069 - a0447a51246aea0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Diary.WriteDiaryViewController.titleTextField.setter : Swift.Optional&lt;__C.UITextField&gt;"
+                  moduleName = "Diary"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kangjiwon/Desktop/IOS%20/IOS_App/Diary/Diary/Assets.xcassets/WriteDiaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "108">
+               </Location>
+               <Location
+                  uuid = "9F97E22A-674F-42B7-943C-C5074CA22069 - b9763f0443b57793"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Diary.WriteDiaryViewController.titleTextField.modify : Swift.Optional&lt;__C.UITextField&gt;"
+                  moduleName = "Diary"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kangjiwon/Desktop/IOS%20/IOS_App/Diary/Diary/Assets.xcassets/WriteDiaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "9F97E22A-674F-42B7-943C-C5074CA22069 - af9527a40a902571"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Diary.WriteDiaryViewController.titleTextField.modify : Swift.Optional&lt;__C.UITextField&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Diary"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kangjiwon/Desktop/IOS%20/IOS_App/Diary/Diary/Assets.xcassets/WriteDiaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  uuid = "9F97E22A-674F-42B7-943C-C5074CA22069 - 21f4f08b965ddda6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Diary.WriteDiaryViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Diary.WriteDiaryViewController"
+                  moduleName = "Diary"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kangjiwon/Desktop/IOS%20/IOS_App/Diary/Diary/Assets.xcassets/WriteDiaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "128">
+               </Location>
+               <Location
+                  uuid = "9F97E22A-674F-42B7-943C-C5074CA22069 - 8146fc0f198304bd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Diary.WriteDiaryViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Diary.WriteDiaryViewController&gt;"
+                  moduleName = "Diary"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kangjiwon/Desktop/IOS%20/IOS_App/Diary/Diary/Assets.xcassets/WriteDiaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "104">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
