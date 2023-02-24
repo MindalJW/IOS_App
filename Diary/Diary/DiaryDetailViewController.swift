@@ -9,6 +9,7 @@ import UIKit
 
 protocol DiaryDetailViewDelegate: AnyObject {//델리게이트 프로토콜 작성
     func didSelectDelete(indexPath: IndexPath)//위임할 삭제함수
+    func didSelectStar(indexPath: IndexPath, isStar: Bool)
 }
 
 class DiaryDetailViewController: UIViewController {
@@ -16,6 +17,7 @@ class DiaryDetailViewController: UIViewController {
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
+    var starButton: UIBarButtonItem?
     weak var delegate: DiaryDetailViewDelegate?
     
     var diary: Diary?
@@ -36,6 +38,10 @@ class DiaryDetailViewController: UIViewController {
         self.titleLabel.text = diary.title
         self.contentsTextView.text = diary.contents
         self.dateLabel.text = dateToString(date: diary.date)
+        self.starButton = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(tapStarButton))
+        self.starButton?.image = diary.isStar ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
+        self.starButton?.tintColor = .orange
+        self.navigationItem.rightBarButtonItem = self.starButton
     }
     
     private func dateToString(date: Date) -> String {
@@ -66,6 +72,18 @@ class DiaryDetailViewController: UIViewController {
         guard let indexPath = self.indexPath else { return }//다이어리 리스트에서 선택한 다이어리 객체의 인덱스패치를 옵셔널바인딩
         self.delegate?.didSelectDelete(indexPath: indexPath)//Viewcontroller에서 대신해줄 함수 호출
         self.navigationController?.popViewController(animated: true)//다이어리 상세화면을 팝
+    }
+    
+    @objc func tapStarButton() {
+        guard let isStar = self.diary?.isStar else { return }
+        guard let indexPath = self.indexPath else { return }
+        if isStar {
+            self.starButton?.image = UIImage(systemName: "star")
+        } else {
+            self.starButton?.image = UIImage(systemName: "star.fill")
+        }
+        self.diary?.isStar = !isStar
+        self.delegate?.didSelectStar(indexPath: indexPath, isStar: self.diary?.isStar ?? false)
     }
     
     deinit {
