@@ -22,9 +22,19 @@ class ViewController: UIViewController {
         self.loadDiaryList()
         NotificationCenter.default.addObserver(//노티피케이션 옵저버 등록
             self,//옵저빙하는 인스턴스
-            selector: #selector(editDiaryNotification(_:)),//탐지됐을때 호출되는 함수
+            selector: #selector(editDiaryNotification),//탐지됐을때 호출되는 함수
             name: NSNotification.Name("editDiary"),//탐지할 노티피케이션 이름
             object: nil)//어디서든 알람 수신가능
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(starDiaryNotification),
+            name: NSNotification.Name("StarDiary"),
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(deleteDiaryNotification),
+            name: NSNotification.Name("deleteDiary"),
+            object: nil)
     }
     
     
@@ -43,6 +53,20 @@ class ViewController: UIViewController {
             $0.date.compare($1.date) == .orderedDescending
         })//다이어리 리스트를 시간순 정렬
         self.collectionView.reloadData()//콜렉션뷰 새로고침
+    }
+    
+    @objc func starDiaryNotification(_ notification: Notification) {
+        guard let starDiary = notification.object as? [String: Any] else { return }
+        guard let isStar = starDiary["isStar"] as? Bool else { return }
+        guard let indexPath = starDiary["indexPath"] as? IndexPath else { return }
+        self.diaryList[indexPath.row].isStar = isStar
+    }
+    
+    @objc func deleteDiaryNotification(_ notification: Notification) {
+        guard let deleteDiary = notification.object as? [String: Any] else { return }
+        guard let indexPath = deleteDiary["indexPath"] as? IndexPath else { return }
+        self.diaryList.remove(at: indexPath.row)
+        self.collectionView.deleteItems(at: [indexPath])
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -112,9 +136,7 @@ extension ViewController: UICollectionViewDelegate {
         let diary = self.diaryList[indexPath.row]
         Viewcontroller.diary = diary
         Viewcontroller.indexPath = indexPath
-        Viewcontroller.delegate = self
         self.navigationController?.pushViewController(Viewcontroller, animated: true)
-        
     }
 }
 
@@ -135,13 +157,3 @@ extension ViewController:WriteDiaryViewDelegate {
     }
 }
 
-extension ViewController: DiaryDetailViewDelegate {
-    func didSelectDelete(indexPath: IndexPath) {
-        self.diaryList.remove(at: indexPath.row)
-        self.collectionView.deleteItems(at: [indexPath])
-    }
-    
-    func didSelectStar(indexPath: IndexPath, isStar: Bool) {
-        self.diaryList[indexPath.row].isStar = isStar
-    }
-}

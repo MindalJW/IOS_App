@@ -13,7 +13,7 @@ enum DiaryEditorMode {//수정버튼을 통해 들어왔는지 등록버튼을 �
 }
 
 protocol WriteDiaryViewDelegate: AnyObject {
-    func didSelectReigster(diary: Diary)
+    func didSelectReigster(diary: Diary)//등록버튼을 눌렀을때 실행되는 메서드
 }//위임자가 대신해야할 함수(프로토콜)를 채택
 
 class WriteDiaryViewController: UIViewController {
@@ -74,7 +74,7 @@ class WriteDiaryViewController: UIViewController {
     }
     
     private func configureInputField() {
-        self.contentsTextView.delegate = self
+        self.contentsTextView.delegate = self//UITextView에는 AddTarget메서드가 없기때문에 델리게이트패턴으로 구현
         //콘텐츠텍스트뷰 위임
         self.titleTextField.addTarget(self, action: #selector(titleTextFieldDidChange(_:)), for: .editingChanged)
         //제목텍스트필드의 값이 변경될때마다 셀렉터 메서드 동작
@@ -86,12 +86,13 @@ class WriteDiaryViewController: UIViewController {
         guard let title = self.titleTextField.text else { return } //제목 옵셔널 바인딩
         guard let contents = self.contentsTextView.text else { return }//내용 옵셔널 바인딩
         guard let date = self.diaryDate else { return }//날짜 옵셔널 바인딩
-        let diary = Diary(title: title, contents: contents, date: date, isStar: false)//다이어리 객체 생성
         
         switch self.diaryEditorMode {
         case .new:
+            let diary = Diary(title: title, contents: contents, date: date, isStar: false)//다이어리 객체 생성
             self.delegate?.didSelectReigster(diary: diary)//위임자(ViewController)에게 전달
-        case let .edit(indexPath, _)://수정모드일때
+        case let .edit(indexPath, diary)://수정모드일때
+            let diary = Diary(title: title, contents: contents, date: date, isStar: diary.isStar)//다이어리 객체 생성
             NotificationCenter.default.post(//노티피케이션센터 포스트 등록
                 name: NSNotification.Name("editDiary"),//노티피케이션 이름 editDiary로 설정
                 object: diary,//오브젝트로 다이어리객체를 넘겨줌
@@ -132,7 +133,7 @@ class WriteDiaryViewController: UIViewController {
     }
 }
 
-extension WriteDiaryViewController:UITextViewDelegate {
+extension WriteDiaryViewController: UITextViewDelegate {//UITextView에는 AddTarget메서드가 없기때문에 델리게이트패턴으로 구현
     func textViewDidChange(_ textView: UITextView) {//위임받은 기능
         self.validateInputField()//텍스트뷰의 값이 변경될때마다 호출
     }
