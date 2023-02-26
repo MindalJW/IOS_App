@@ -10,20 +10,28 @@ class StarViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var diaryList = [Diary]()
+    private var diaryList = [Diary]()//즐겨찾기뷰에 표시할 다이어리 리스트 배열
      
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureCollectionView()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.loadStarDiaryList()
+        self.configureCollectionView()
     }
+    //viewDidLoad(): 뷰 컨트롤러의 뷰가 메모리에 로드될 때 한 번만 호출되므로,
+    //일반적으로 뷰와 관련된 초기화 코드를 작성하는 데 사용됩니다.
+    //이 메소드는 뷰 컨트롤러의 뷰가 처음 생성될 때 한 번만 호출되므로, 이후에는 호출되지 않습니다.
     
+    //viewWillAppear(_:): 뷰가 화면에 나타나기 직전에 호출되므로,
+    //뷰와 관련된 작업(예: 데이터 로딩, 레이아웃 변경 등)은 주로 이 메소드에서 수행됩니다.
+    //이 메소드는 뷰가 화면에 나타날 때마다 호출되므로
     private func configureCollectionView() {
         self.collectionView.collectionViewLayout = UICollectionViewFlowLayout()
+        //콜렉션뷰레이아웃에 콜렉션뷰플로우레이아웃을 할당
         self.collectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         //컬렉션뷰의 섹션자체의 탑,레프트,바텀,라이트의 간격을 정할수있다.
         self.collectionView.delegate = self
@@ -44,7 +52,6 @@ class StarViewController: UIViewController {
         }).sorted(by: {
             $0.date.compare($1.date) == .orderedDescending
         })
-        self.collectionView.reloadData()
     }
     
     private func dateToString(date: Date) -> String {
