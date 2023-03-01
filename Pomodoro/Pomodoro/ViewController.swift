@@ -23,14 +23,14 @@ class ViewController: UIViewController {
     var timerStatus: TimerStatus = .end
     var duration = 60
     var timer: DispatchSourceTimer?//DispatchSource의 이벤트중 하나로 지정된 간격 후에 코드를 실행할수있는 이벤트
-    var currentSeconds = 0
+    var currentSeconds = 0 //계속 변경되는 시간의 값을 받을 변수
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureToggleButton()
     }
     
-    func setTimerInfoViewVisible(isHidden: Bool) {
+    func setTimerInfoViewVisible(isHidden: Bool) {//타이머가 시작되면 보여야할것들
         self.timerLabel.isHidden = isHidden
         self.progressView.isHidden = isHidden
     }
@@ -51,7 +51,9 @@ class ViewController: UIViewController {
                 self?.currentSeconds -= 1
                 debugPrint(self?.currentSeconds)
                 
-                if self?.currentSeconds ?? 0 <= 0 {
+                if self?.currentSeconds ?? 0 <= 0 { /*self?.currentSeconds가 nil일 경우 nil과 0을 비교하는 연산을
+                                                     피하기 위해 nil 병합연산자 ?? 을 사용하여 nil일 경우 0을 할당하고
+                                                     currentSeconds가 0보다 작으면 타이머가 종료된것이기 떄문에 stopTimer호출*/
                     self?.stopTimer()
                 }
             })
@@ -61,7 +63,9 @@ class ViewController: UIViewController {
     
     func stopTimer() {
         if self.timerStatus == .pause {
-            self.timer?.resume()
+            self.timer?.resume()/*timer가 suspend상태일때 타이머에 nil을 할당하게되면
+                                 런타임에러가 발생하기때문에 먼저 resume메서드를
+                                 호출해준뒤에 nil을 할당해야한다*/
         }
         self.timerStatus = .end
         self.cancleButton.isEnabled = false
@@ -72,32 +76,33 @@ class ViewController: UIViewController {
         self.timer = nil//타이머를 종료할때 항상 nil을 할당해주어야함, 안그러면 화면을 벗어나도 타이머가 계속 돌아갈수있음
     }
     
-    @IBAction func tapCancleButton(_ sender: Any) {
+    @IBAction func tapCancleButton(_ sender: Any) {//종료버튼을 누르면 호출되는 함수
         self.stopTimer()
     }
     
     @IBAction func tapToggleButton(_ sender: Any) {
         self.duration = Int(self.datePicker.countDownDuration)//datePicker에서 선택한 시간이 몇초인지 알려줌
         
-        switch self.timerStatus {
+        switch self.timerStatus {//switch문을 통해 현재 타이머의 상태에따라 시작or일시정지 버튼을 눌렀을때 다른 코드가 실행되게함
         case .end:
-            self.currentSeconds = self.duration
-            self.timerStatus = .start
-            self.setTimerInfoViewVisible(isHidden: false)
-            self.datePicker.isHidden = true
-            self.toggleButton.isSelected = true
-            self.cancleButton.isEnabled = true
-            self.startTimer()
+            self.currentSeconds = self.duration//currentSeconds변수를 datePicker에서 설정한 시간으로 초기화
+            self.timerStatus = .start//타이머 상태를 .start로 변경
+            self.setTimerInfoViewVisible(isHidden: false)//timerLabel과 progressView의 isHidden상태를 false로 변경
+            self.datePicker.isHidden = true//datePicker를 안보이게 설정
+            self.toggleButton.isSelected = true //toggleButton(시작)의 isSelected를 true로 설정
+            self.cancleButton.isEnabled = true //종료버튼 활성화
+            self.startTimer()//DispatchSource의 timer이벤트를 시작
             
         case .start:
-            self.timerStatus = .pause
-            self.toggleButton.isSelected = false
-            self.timer?.suspend()
+            self.timerStatus = .pause//타이머상태를 .pause로 변경
+            self.toggleButton.isSelected = false/*toggleButton(시작)의 isSelected를 false로 설정
+                                                 ->LabelTitle을 일시정지로 변경*/
+            self.timer?.suspend()//DispatchSource의 timer이벤트를 suspend(일시정지)
             
         case .pause:
-            self.timerStatus = .start
-            self.toggleButton.isSelected = true
-            self.timer?.resume()
+            self.timerStatus = .start//타이머 상태를 다시 .start로 변경
+            self.toggleButton.isSelected = true//toggleButton(시작)의 isSelected를 true로 설정
+            self.timer?.resume()//DispatchSource의 timer이벤트를 suspend(일시정지)
         }
     }
 }
