@@ -72,7 +72,10 @@ class ViewController: UIViewController {
         self.setTimerInfoViewVisible(isHidden: true)
         self.datePicker.isHidden = false
         self.toggleButton.isSelected = false
-        self.timer?.cancel()
+        self.timer?.cancel()/*cancel() 메서드가 호출되면 아직 실행되지 않은 대기 중인 타이머 이벤트가 폐기되고 타이머는 취소된 것으로
+                             표시됩니다. 타이머의 이벤트 핸들러 블록은 다시 호출되지 않습니다.
+                             타이머가 취소되면 다시 시작할 수 없다는 점에 유의해야 합니다.
+                             새 타이머를 생성하려면 DispatchSourceTimer의 새 인스턴스를 생성하고 다시 예약해야 합니다.*/
         self.timer = nil//타이머를 종료할때 항상 nil을 할당해주어야함, 안그러면 화면을 벗어나도 타이머가 계속 돌아갈수있음
     }
     
