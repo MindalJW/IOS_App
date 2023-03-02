@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import AudioToolbox
 
-enum TimerStatus {
+enum TimerStatus {//타이머의 상태 열거형
     case start
     case pause
     case end
@@ -19,7 +20,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var cancleButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var timerLabel: UILabel!
-    
+    @IBOutlet weak var imageView: UIImageView!
     var timerStatus: TimerStatus = .end
     var duration = 60
     var timer: DispatchSourceTimer?//DispatchSource의 이벤트중 하나로 지정된 간격 후에 코드를 실행할수있는 이벤트
@@ -48,13 +49,30 @@ class ViewController: UIViewController {
             self.timer?.setEventHandler(handler: { [weak self] in /*타이머 이벤트가 실행될때 실행될 코드를 클러저에 지정
                                                                    클로저에서 self를 캡처할때 강한순환참조가
                                                                    발생할수있기떄문에 weakself를 사용하여 메모리 누수 방지*/
-                self?.currentSeconds -= 1
-                debugPrint(self?.currentSeconds)
+                guard let self = self else { return }//일시적으로 self를 strong참조로 만들어줌
+                self.currentSeconds -= 1
+                let hour = self.currentSeconds / 3600 //1시간이 3600초이기떄문애 현재 초를 3600으로 나눈 몫은 시간.
+                let minutes = (self.currentSeconds % 3600) / 60 /*현재초를 3600(시간)으로 나누고 나눈
+                                                                 나머지를 60으로 나눈 몫은 분.*/
+                let seconds = (self.currentSeconds % 3600) % 60//3600(시간)으로나눈 나머지를 60(분)으로 나눈 나머지는 곧 초이다.
+                self.timerLabel.text = String(format: "%02d:%02d:%02d", hour, minutes, seconds)
+                /*앞에 0이 있는 두 자리 숫자로 형식이 지정된 정수용 자리 표시자가 세 개 있는 문자열을 만듭니다.
+                 자리 표시자는 콜론으로 구분되어 시, 분, 초를 나타냅니다*/
+                self.progressView.progress = Float(self.currentSeconds) / Float(self.duration)
+                //현재시간을 데이트픽커에서 선택한 시간으로 나누어 프로그레스뷰를 갱신
+                UIView.animate(withDuration: 0.5, delay: 0, animations: {
+                    self.imageView.transform = CGAffineTransform(rotationAngle: .pi)
+                })//현재각도에서 .pi각도까지 0.5초의 시간동안 회전애니메이션
+                UIView.animate(withDuration: 0.5, delay: 0.5, animations: {
+                    self.imageView.transform = CGAffineTransform(rotationAngle: .pi)
+                })/*현재각도에서 .pi * 2 각도까지 0.5초의 딜레이(앞의 에니메이션이 종료 이후)를
+                   갖고 0.5초의 시간동안 회전애니메이션*/
                 
-                if self?.currentSeconds ?? 0 <= 0 { /*self?.currentSeconds가 nil일 경우 nil과 0을 비교하는 연산을
+                if self.currentSeconds <= 0 { /*self?.currentSeconds가 nil일 경우 nil과 0을 비교하는 연산을
                                                      피하기 위해 nil 병합연산자 ?? 을 사용하여 nil일 경우 0을 할당하고
                                                      currentSeconds가 0보다 작으면 타이머가 종료된것이기 떄문에 stopTimer호출*/
-                    self?.stopTimer()
+                    self.stopTimer()
+                    AudioServicesPlaySystemSound(1005)//설정한 타이머가 끝나면 설정한 알람소리(1005)을 출력
                 }
             })
             self.timer?.resume()//타이머를 시작하려면 resume메서드를 호출해야함
@@ -69,9 +87,12 @@ class ViewController: UIViewController {
         }
         self.timerStatus = .end
         self.cancleButton.isEnabled = false
-        self.setTimerInfoViewVisible(isHidden: true)
-        self.datePicker.isHidden = false
-        self.toggleButton.isSelected = false
+        UIView.animate(withDuration: 0.2, animations: {//자연스러운 변환을 위해 투명도를 0.2의 시간동안 변환
+            self.timerLabel.alpha = 0
+            self.progressView.alpha = 0
+            self.datePicker.alpha = 1
+        })
+        self.imageView.transform = .identity
         self.timer?.cancel()/*cancel() 메서드가 호출되면 아직 실행되지 않은 대기 중인 타이머 이벤트가 폐기되고 타이머는 취소된 것으로
                              표시됩니다. 타이머의 이벤트 핸들러 블록은 다시 호출되지 않습니다.
                              타이머가 취소되면 다시 시작할 수 없다는 점에 유의해야 합니다.
@@ -90,8 +111,11 @@ class ViewController: UIViewController {
         case .end:
             self.currentSeconds = self.duration//currentSeconds변수를 datePicker에서 설정한 시간으로 초기화
             self.timerStatus = .start//타이머 상태를 .start로 변경
-            self.setTimerInfoViewVisible(isHidden: false)//timerLabel과 progressView의 isHidden상태를 false로 변경
-            self.datePicker.isHidden = true//datePicker를 안보이게 설정
+            UIView.animate(withDuration: 0.2, animations: {//자연스러운 변환을 위해 투명도를 0.2의 시간동안 변환
+                self.timerLabel.alpha = 1
+                self.progressView.alpha = 1
+                self.datePicker.alpha = 0
+            })
             self.toggleButton.isSelected = true //toggleButton(시작)의 isSelected를 true로 설정
             self.cancleButton.isEnabled = true //종료버튼 활성화
             self.startTimer()//DispatchSource의 timer이벤트를 시작
