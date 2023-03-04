@@ -98,12 +98,13 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="cityNameLabel" destination="mke-V6-Wml" id="6Od-kG-q49"/>
+                        <outlet property="cityNameLabel" destination="PAp-3Y-BFA" id="J7C-kl-M7e"/>
                         <outlet property="cityNameTextField" destination="y4N-Jc-o7u" id="5xO-EC-Lga"/>
                         <outlet property="maxTempLabel" destination="GMh-Pj-NdS" id="7qU-9A-Hd8"/>
                         <outlet property="minTempLabel" destination="wWu-IZ-LkV" id="N5i-xB-j67"/>
                         <outlet property="tempLabel" destination="mke-V6-Wml" id="khl-Ut-kEF"/>
                         <outlet property="weatherDescriptionLabel" destination="Iml-Dd-R7I" id="Mjx-o6-kGy"/>
+                        <outlet property="weatherStackView" destination="Icp-DZ-5j7" id="vdL-R1-Lhf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

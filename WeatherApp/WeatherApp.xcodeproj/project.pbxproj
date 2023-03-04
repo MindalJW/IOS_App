@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		455E400529B3176D002BDE6C /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455E400429B3176D002BDE6C /* ErrorMessage.swift */; };
 		4568F34229B20F66002C8965 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4568F34129B20F66002C8965 /* AppDelegate.swift */; };
 		4568F34429B20F66002C8965 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4568F34329B20F66002C8965 /* SceneDelegate.swift */; };
 		4568F34629B20F66002C8965 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4568F34529B20F66002C8965 /* ViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		455E400429B3176D002BDE6C /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		4568F33E29B20F66002C8965 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4568F34129B20F66002C8965 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4568F34329B20F66002C8965 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				4568F34C29B20F67002C8965 /* LaunchScreen.storyboard */,
 				4568F34F29B20F67002C8965 /* Info.plist */,
 				4568F35529B218BD002C8965 /* WeatherInformation.swift */,
+				455E400429B3176D002BDE6C /* ErrorMessage.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			files = (
 				4568F34629B20F66002C8965 /* ViewController.swift in Sources */,
 				4568F35629B218BD002C8965 /* WeatherInformation.swift in Sources */,
+				455E400529B3176D002BDE6C /* ErrorMessage.swift in Sources */,
 				4568F34229B20F66002C8965 /* AppDelegate.swift in Sources */,
 				4568F34429B20F66002C8965 /* SceneDelegate.swift in Sources */,
 			);

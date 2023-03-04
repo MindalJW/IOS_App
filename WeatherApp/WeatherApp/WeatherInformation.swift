@@ -14,12 +14,12 @@ struct WeatherInformation: Codable {
     
     enum CodingKeys: String, CodingKey {//JSON파일의 데이터이름 매핑시켜주기위함
         case weather
-        case temp = "main"//JOSN파일의 데이터이름이 "main"이고 Swift에서 temp로 사용
+        case temp = "main"//받아올 JOSN파일의 데이터이름이 "main"이고 Swift에서 temp로 사용
         case name
     }
 }
 
-struct Weather: Codable {//JOSN파일의 데이터이름과 똑같이 만들어줌
+struct Weather: Codable {//받아올 JOSN파일의 데이터이름과 똑같이 만들어줌
     let id: Int
     let main: String
     let description: String
