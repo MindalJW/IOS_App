@@ -1,0 +1,26 @@
+PODS:
+  - Alamofire (5.6.4)
+  - Charts (4.1.0):
+    - Charts/Core (= 4.1.0)
+  - Charts/Core (4.1.0):
+    - SwiftAlgorithms (~> 1.0)
+  - SwiftAlgorithms (1.0.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - Charts
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Charts
+    - SwiftAlgorithms
+
+SPEC CHECKSUMS:
+  Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
+  Charts: 354f86803d11d9c35de280587fef50d1af063978
+  SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
+
+PODFILE CHECKSUM: a40f4ab6e0559bc31e0f904383a53192b75b1bcf
+
+COCOAPODS: 1.12.0
