@@ -86,7 +86,7 @@
         <!--Covid Detail View Controller-->
         <scene sceneID="UaH-Pl-hbM">
             <objects>
-                <tableViewController id="qsi-jh-tu5" customClass="CovidDetailViewController" customModule="COVID19" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="CovidDetailViewController" id="qsi-jh-tu5" customClass="CovidDetailViewController" customModule="COVID19" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="heJ-sF-WW0">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -276,7 +276,7 @@
                         <outlet property="overseasInflowCell" destination="Kbj-8f-oXX" id="dIa-Yr-nUY"/>
                         <outlet property="percentageCell" destination="gTK-y2-4cA" id="bAl-Hs-ZqU"/>
                         <outlet property="recoverdCell" destination="2yJ-dr-Yxo" id="6DA-fP-fxo"/>
-                        <outlet property="regionalOutbreakCell" destination="gBz-ur-2bi" id="V7j-Yl-6UC"/>
+                        <outlet property="regionalOutbreakCell" destination="cxI-uw-Yzd" id="K0d-5E-KHy"/>
                         <outlet property="totalCaseCell" destination="1Pg-UF-jcp" id="OJv-mg-Jdm"/>
                     </connections>
                 </tableViewController>

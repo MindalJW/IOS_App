@@ -50,6 +50,7 @@ class ViewController: UIViewController {
 }
     
     func configureChatView(covidOverViewList: [CovidOverview]) {
+        self.pieChartView.delegate = self
         let entries = covidOverViewList.compactMap { [weak self] overview -> PieChartDataEntry? in
             guard let self = self else { return nil } /*PieChartDataEntry?(nil or PieChartDataEntry)를 반환해야하는데
                                                        항상하던대로 그냥 { return }을 해버리면 void를 반환하는거로되서 오류가남*/
@@ -64,9 +65,9 @@ class ViewController: UIViewController {
         dataSet.entryLabelColor = .black
         dataSet.valueTextColor = .black
         dataSet.xValuePosition = .outsideSlice
-        dataSet.valueLinePart1OffsetPercentage = 0.8
-        dataSet.valueLinePart1Length = 0.2
-        dataSet.valueLinePart2Length = 0.3
+        dataSet.valueLinePart1OffsetPercentage = 0.8//선이 시작하는 곳 위치
+        dataSet.valueLinePart1Length = 0.2//그래프에서 나가는 선길이
+        dataSet.valueLinePart2Length = 0.3//나가다가 꺾이는선 길이
         
         dataSet.colors = ChartColorTemplates.vordiplom() +
         ChartColorTemplates.liberty() +
@@ -124,3 +125,11 @@ class ViewController: UIViewController {
 }
 
 
+extension ViewController: ChartViewDelegate {
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        guard let covidDetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "CovidDetailViewController") as? CovidDetailViewController else { return }
+        guard let covidOverview = entry.data as? CovidOverview else { return }
+        covidDetailViewController.covidOverview = covidOverview
+        self.navigationController?.pushViewController(covidDetailViewController, animated: true)
+    }
+}
