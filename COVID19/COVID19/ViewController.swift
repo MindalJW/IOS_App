@@ -11,13 +11,20 @@ import Charts
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var indicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var labelStackView: UIStackView!
     @IBOutlet weak var pieChartView: PieChartView!
     @IBOutlet weak var newCaseLabel: UILabel!
     @IBOutlet weak var totalCaseLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.indicatorView.startAnimating()
         self.fetchCovidOverview(completionHandler: { [weak self] result in //후행클로저, 비동기처리가 완료되면 result개체와 함께 클로저가 호출
             guard let self = self else { return }
+            self.indicatorView.stopAnimating()
+            self.indicatorView.isHidden = true
+            self.labelStackView.isHidden = false
+            self.pieChartView.isHidden = false
             switch result {
             case let .success(result):
                 self.configureStackView(koreaCovidOverview: result.korea)
@@ -133,3 +140,4 @@ extension ViewController: ChartViewDelegate {
         self.navigationController?.pushViewController(covidDetailViewController, animated: true)
     }
 }
+  
